@@ -1,6 +1,27 @@
 <!DOCTYPE html>
-
 <html lang="en">
+
+<!--
+	KK Cabinets
+    Copyright (C) 2020  Luke Zhang, Ethan Lim
+    
+    https://github.com/Luke-zhang-04
+    https://github.com/ethanlim04
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -28,6 +49,29 @@
             </form>
         </div>
     </div>
+
+    <!-- FIREBASE STUFF-->
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.11.0/firebase-app.js"></script>
+
+    <!-- Add Firebase products that you want to use -->
+    <script src="https://www.gstatic.com/firebasejs/7.11.0/firebase-auth.js"></script>
+
+
+    <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyC8LzSIS1mRoQuFnjtwq1U5vtp2Hx2rdtk",
+            authDomain: "kk-cabinets.firebaseapp.com",
+            databaseURL: "https://kk-cabinets.firebaseio.com",
+            projectId: "kk-cabinets",
+            storageBucket: "kk-cabinets.appspot.com",
+            messagingSenderId: "999203573812",
+            appId: "1:999203573812:web:7baa8753bce4e8ac187a61"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+    </script>
 
     <script src="js/jquery.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
