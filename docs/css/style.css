@@ -67,15 +67,15 @@ body {
 }
 
 #first {
-    animation: fadeIn ease 2s;
+    animation: fadeIn ease 1s;
 }
 
 #second {
-    animation: fadeIn2 ease 3s;
+    animation: fadeIn2 ease 1.5s;
 }
 
 #adminContent {
-    animation: fadeIn3 ease 4s;
+    animation: fadeIn3 ease 2s;
 }
 
 @keyframes fadeIn {
