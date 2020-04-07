@@ -60,3 +60,75 @@ body {
     margin-left: auto;
     margin-right: auto;
 }
+
+#adminList {
+    max-height: 75vh;
+}
+
+#first {
+    animation: fadeIn ease 2s;
+}
+
+#second {
+    animation: fadeIn2 ease 3s;
+}
+
+#adminContent {
+    animation: fadeIn3 ease 4s;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    } 100% {
+        opacity: 1;
+    }
+}
+
+@-webkit-keyframes fadeIn {
+    0% {
+        opacity: 0;
+    } 100% {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn2 {
+    0% {
+        opacity: 0;
+    } 33% {
+        opacity: 0;
+    } 100% {
+        opacity: 1;
+    }
+}
+
+@-webkit-keyframes fadeIn2 {
+    0% {
+        opacity: 0;
+    } 33% {
+        opacity: 0;
+    } 100% {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn3 {
+    0% {
+        opacity: 0;
+    } 66% {
+        opacity: 0;
+    } 100% {
+        opacity: 1;
+    }
+}
+
+@-webkit-keyframes fadeIn3 {
+    0% {
+        opacity: 0;
+    } 50% {
+        opacity: 0;
+    } 100% {
+        opacity: 1;
+    }
+}

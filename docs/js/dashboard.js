@@ -55,13 +55,26 @@ function logout() {
     })
 }
 
+function listAdmins() {
+
+}
+
+function show_admin(email) {
+    document.getElementById("adminContent").style.display = "block"
+    listAdmins()
+    document.getElementById("welcome").insertAdjacentHTML(
+        "beforeend",
+        `<span id=\"second\">${email}</span>`
+    )
+}
+
 firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
         firebase.auth().currentUser.getIdTokenResult().then((idTokenResult) => {
             console.log(idTokenResult)
             // Confirm the user is an Admin.
             if (!!idTokenResult.claims.admin) {
-                document.getElementById("adminContent").style.display = "block"
+                show_admin(user.email)
             } else {
                 document.getElementById("adminContent").style.display = "none"
                 document.getElementById("adminContent").remove()
