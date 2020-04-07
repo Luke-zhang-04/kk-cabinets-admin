@@ -39,7 +39,11 @@ document.getElementById("confirmButton").addEventListener("click", () => {
     addAdminRole({email: adminEmail}).then(result => {
         alert(result.data.message)
     }).catch(error => {
-        alert(error.data)
+        if (error.data === undefined) {
+            alert("ERROR! Only admins can add other admins\nThought we didn't have backend security too?")
+        } else {
+            alert(error.data)
+        }
     })
     document.getElementById("confirm").style.display = "none"
     document.getElementById("makeButton").style.display = "block"
@@ -68,6 +72,7 @@ firebase.auth().onAuthStateChanged(function(user) {
             let errorCode = error.code
             let errorMessage = error.message
             window.alert("ERROR! Code: " + errorCode + "\nInfo: " + errorMessage)
+            console.log(error)
         })
     } else {
         document.getElementById("adminContent").style.display = "none"
