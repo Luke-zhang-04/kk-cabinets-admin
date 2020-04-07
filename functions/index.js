@@ -1,6 +1,6 @@
 /*
 	KK Cabinets
-    Copyright (C) 2020  Luke Zhang, Ethan Lim
+    Copyright (C) 2020 Luke Zhang, Ethan Lim
     
     https://github.com/Luke-zhang-04
     https://github.com/ethanlim04
@@ -18,18 +18,15 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
 const functions = require('firebase-functions')
 const admin = require('firebase-admin')
-
 admin.initializeApp()
 
 exports.addAdminRole = functions.https.onCall((data, context) => {
     //get user and add custom claim (admin)
     return admin.auth().getUserByEmail(data.email).then(user => {
-        return admin.auth().setCustomUserClaims(user.uid, {
-            admin: true
-        })
+        console.log(context)
+        return admin.auth().setCustomUserClaims(user.uid, {admin: true})
     }).then(() => {
         return {
             message: `Success! ${data.email} has been made an admin`
