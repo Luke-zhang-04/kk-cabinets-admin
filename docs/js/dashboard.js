@@ -1,6 +1,6 @@
 /*
 	KK Cabinets
-    Copyright (C) 2020  Luke Zhang, Ethan Lim
+    Copyright (C) 2020 Luke Zhang, Ethan Lim
     
     https://github.com/Luke-zhang-04
     https://github.com/ethanlim04
@@ -20,11 +20,59 @@
 */
 
 const adminForm = document.querySelector(".admin-actions")
+
 adminForm.addEventListener("submit", (e) => {
     e.preventDefault()
+    document.getElementById("confirm").style.display = "block"
+    document.getElementById("makeButton").style.display = "none"
+})
+
+document.getElementById("cancelButton").addEventListener("click", () => {
+    document.getElementById("confirm").style.display = "none"
+    document.getElementById("makeButton").style.display = "block"
+})
+
+document.getElementById("confirmButton").addEventListener("click", () => {
     const adminEmail = document.querySelector("#new-admin-email").value
     const addAdminRole = functions.httpsCallable("addAdminRole")
+
     addAdminRole({email: adminEmail}).then(result => {
-        console.log(result)
+        alert(result.data.message)
+    }).catch(error => {
+        alert(error.data)
     })
+    document.getElementById("confirm").style.display = "none"
+    document.getElementById("makeButton").style.display = "block"
+})
+
+function logout() {
+    firebase.auth().signOut().then(() => {
+        console.log("Sucessfully Logged Out")
+    })
+}
+
+firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+        firebase.auth().currentUser.getIdTokenResult().then((idTokenResult) => {
+            console.log(idTokenResult)
+            // Confirm the user is an Admin.
+            if (!!idTokenResult.claims.admin) {
+                document.getElementById("adminContent").style.display = "block"
+            } else {
+                document.getElementById("adminContent").style.display = "none"
+                document.getElementById("adminContent").remove()
+                alert("UNAUTHORIZED ACCESS")
+                window.location.href = "index.html"
+            }
+        }).catch((error) => {
+            let errorCode = error.code
+            let errorMessage = error.message
+            window.alert("ERROR! Code: " + errorCode + "\nInfo: " + errorMessage)
+        })
+    } else {
+        document.getElementById("adminContent").style.display = "none"
+        document.getElementById("adminContent").remove()
+        alert("UNAUTHORIZED ACCESS")
+        window.location.href = "index.html"
+    }
 })
