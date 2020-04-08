@@ -141,7 +141,11 @@ function listAdmins() {
 }
 
 function show_admin(email, status) {
-    document.getElementById("adminContent").style.display = "block"
+    if (status === "admin") {
+        document.getElementById("adminContent").style.display = "block"
+    }
+    document.getElementById("editorContent").style.display = "block"
+    
     listAdmins()
     document.getElementById("welcome").insertAdjacentHTML(
         "beforeend",
@@ -165,6 +169,8 @@ firebase.auth().onAuthStateChanged(function(user) {
             }else {
                 document.getElementById("adminContent").style.display = "none"
                 document.getElementById("adminContent").remove()
+                document.getElementById("editorContent").style.display = "none"
+                document.getElementById("editorContent").remove()
                 alert("UNAUTHORIZED ACCESS")
                 window.location.href = "index.html"
             }
@@ -177,6 +183,8 @@ firebase.auth().onAuthStateChanged(function(user) {
     } else {
         document.getElementById("adminContent").style.display = "none"
         document.getElementById("adminContent").remove()
+        document.getElementById("editorContent").style.display = "none"
+        document.getElementById("editorContent").remove()
         alert("UNAUTHORIZED ACCESS")
         window.location.href = "index.html"
     }

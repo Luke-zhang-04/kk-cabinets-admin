@@ -82,6 +82,10 @@ body {
     animation: fadeIn3 ease 1s;
 }
 
+#editorContent {
+    animation: fadeIn3 ease 1s;
+}
+
 @keyframes fadeIn {
     0% {
         opacity: 0;

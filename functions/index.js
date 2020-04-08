@@ -18,6 +18,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 const functions = require('firebase-functions')
 const admin = require('firebase-admin')
 
@@ -61,6 +62,26 @@ exports.addEditorRole = functions.https.onCall((data, context) => {
     }).then(() => {
         return {
             message: `Success! ${data.email} has been made an editor`
+        }
+    }).catch(err => {
+        return err
+    })
+})
+
+exports.removeRole = functions.https.onCall((data, context) => {
+    //check for damin creds
+    if (!context.auth.token.admin) {
+        return {message: `ERROR! Only admins can remove other admins or editors\nThought you could get around security, ${data.email}?`}
+    }
+
+    //get user and add custon claim (editor)
+    return admin.auth().getUserByEmail(data.email).then(user => {
+        database.ref("editors/" + user.uid).remove()
+        database.ref("admins/" + user.uid).remove()
+        return admin.auth().setCustomUserClaims(user.uid, {admin: false, editor: false})
+    }).then(() => {
+        return {
+            message: `Success! ${data.email} is no longer an editor/admin`
         }
     }).catch(err => {
         return err

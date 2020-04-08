@@ -27,6 +27,7 @@ firebase.auth().onAuthStateChanged(function (user) {
     else {
     }
 });
+
 //sign in with google
 function googleSignin() {
     var err = false;
@@ -44,11 +45,13 @@ function googleSignin() {
         window.location.href = "dashboard.html"; //redirect
     });
 }
+
 //logout user
 function logout() {
     firebase.auth().signOut();
     console.log("succesfully out");
 }
+
 //log a user in
 function login(email, password) {
     var err = false;
@@ -70,6 +73,7 @@ document.getElementById("login_button").addEventListener("click", function (_) {
     ];
     login.apply(void 0, info);
 });
+
 //google login button
 document.getElementById("login_google").addEventListener("click", function (_) {
     googleSignin();
