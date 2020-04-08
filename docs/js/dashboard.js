@@ -56,7 +56,44 @@ function logout() {
 }
 
 function listAdmins() {
-
+    let adminRef = new Map()
+    database.ref("admins/").once("value").then(snapshot => {
+        for ([i, j] of Object.entries(snapshot.val())) {
+            adminRef[i] = j.email
+        }
+    }).then(() => {
+        let adminList = document.getElementById("adminList")
+        for (uid in adminRef) {
+            let email = adminRef[uid]
+            adminList.insertAdjacentHTML(
+                "beforeend",
+                `<div class="admin_details">
+                    <p>${email}</p>
+                    <p>&emsp;└ ${uid}</p>
+                    <p>&emsp;└ administrator</p>
+                </div>`
+            )
+        }
+    })
+    let editorRef = new Map()
+    database.ref("editors/").once("value").then(snapshot => {
+        for ([i, j] of Object.entries(snapshot.val())) {
+            editorRef[i] = j.email
+        }
+    }).then(() => {
+        let adminList = document.getElementById("adminList")
+        for (uid in editorRef) {
+            let email = editorRef[uid]
+            adminList.insertAdjacentHTML(
+                "beforeend",
+                `<div class="admin_details">
+                    <p>${email}</p>
+                    <p>&emsp;&boxur; ${uid}</p>
+                    <p>&emsp;&boxur; editor</p>
+                </div>`
+            )
+        }
+    })
 }
 
 function show_admin(email) {

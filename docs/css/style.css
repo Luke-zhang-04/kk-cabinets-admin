@@ -67,15 +67,15 @@ body {
 }
 
 #first {
-    animation: fadeIn ease 1s;
+    animation: fadeIn ease .5s;
 }
 
 #second {
-    animation: fadeIn2 ease 1.5s;
+    animation: fadeIn2 ease .75s;
 }
 
 #adminContent {
-    animation: fadeIn3 ease 2s;
+    animation: fadeIn3 ease 1s;
 }
 
 @keyframes fadeIn {
@@ -132,4 +132,20 @@ body {
     } 100% {
         opacity: 1;
     }
+}
+
+.admin_details {
+    padding: 0;
+    padding-bottom: 25px;
+}
+
+.admin_details p {
+    padding: 0;
+    margin: 0;
+}
+
+#adminList {
+    background-color: white;
+    padding-top: 15px;
+    border-radius: 0.3rem;
 }

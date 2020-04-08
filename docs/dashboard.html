@@ -30,6 +30,7 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="icon" href="pictures/logo-transparent-cropped.png">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 
 <body>
@@ -60,8 +61,8 @@
     <div id="adminContent" style="display: none;">
         <div class="container">
             <div class="jumbotron">
-                <h1>Add new admin</h1>
-                <p>This new admin must already be a user with kk-cabinets. If not, they must sign up first at <a href="https://kk-cabinets.herokuapp.com/login">kk-cabinets.herokuapp.com/login</a></p>
+                <h1>Add New Administrator or Moderator</h1>
+                <p>This new admin or mod must already be a user with kk-cabinets. If not, they must sign up first at <a href="https://kk-cabinets.herokuapp.com/login">kk-cabinets.herokuapp.com/login</a></p>
                 <form class="admin-actions">
                     <div class="form-group">
                         <label for="new-admin-email">Email address</label>
@@ -70,7 +71,7 @@
                     <button id="makeButton" type="submit" class="btn btn-warning">Make Admin</button>
                 </form>
                 <div id="confirm" style="display: none;">
-                    <p>WARNING! You are about to create a new Administrator. This administrator will have read and write privelleges to the database. Are you sure you want to proceed?</p>
+                    <p>WARNING! You are about to create a new Administrator. This administrator will have read and write privelleges to the database. Administrators can also capable of REMOVING OTHER ADMINS AND EDITORS. Are you sure you want to proceed?</p>
                     <button id="confirmButton" class="btn btn-success">Confirm</button>
                     <button id="cancelButton" class="btn btn-danger">Cancel</button>
                 </div>
@@ -79,8 +80,14 @@
 
         <div class="container">
             <div class="jumbotron">
-                <h1>All Admins</h1>
-                <div class="container overflow-auto" id="adminList"></div>
+                <h1>All Admins and Editors</h1>
+                <div class="container overflow-auto" id="adminList">
+                    <div class="admin_details">
+                        <p>Email</p>
+                        <p>&emsp;&boxur; user id</p>
+                        <p>&emsp;&boxur; role</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
