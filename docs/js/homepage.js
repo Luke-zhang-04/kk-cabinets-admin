@@ -72,7 +72,7 @@ document.getElementById("login_button").addEventListener("click", function (e) {
         document.getElementById("login_email").value,
         document.getElementById("login_password").value,
     ];
-    login.apply(void 0, info);
+    login(...info);
 });
 
 //google login button
