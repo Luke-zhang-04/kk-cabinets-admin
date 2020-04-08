@@ -157,3 +157,51 @@ body {
     padding-top: 15px;
     border-radius: 0.3rem;
 }
+
+#adminJumbotron {
+    padding: 1rem 1rem !important;
+}
+
+.remove {
+    animation: toBlack ease .5s;
+    cursor: pointer;
+    color: #212529;
+}
+
+.remove:hover {
+    animation: toRed ease .5s;
+    color: #ff0000;
+    cursor: pointer;
+}
+
+@keyframes toRed {
+    from {
+        color: #212529;
+    } to {
+        color: #ff0000;
+    }
+}
+
+@-webkit-keyframes toRed {
+    from {
+        color: #212529;
+    } to {
+        color: #ff0000;
+    }
+}
+
+@keyframes toBlack {
+    from {
+        color: #ff0000;
+    } to {
+        color: #212529;
+    }
+}
+
+@-webkit-keyframes toBlack {
+    from {
+        color: #ff0000;
+    } to {
+        color: #212529;
+    }
+}

@@ -91,11 +91,13 @@ function logout() {
 
 function refreshAdminList() {
     let adminList = document.getElementById("adminList")
-    adminList.innerHTML = "<p>Email</p><p>&emsp;&boxur; user id</p><p>&emsp;&boxur; role</p>"
-    listAdmins()
+    adminList.innerHTML = "<div class=\"admin_details\"><p>Email</p><p>&emsp;&boxur; user id</p><p>&emsp;&boxur; role</p></div>"
+    getStatus().then(status => {
+        listAdmins(status)
+    })
 }
 
-function listAdmins() {
+function listAdmins(status) {
     let adminRef = new Map()
     database.ref("admins/").once("value").then(snapshot => {
         if (snapshot.exists()) {
@@ -107,14 +109,44 @@ function listAdmins() {
         let adminList = document.getElementById("adminList")
         for (uid in adminRef) {
             let email = adminRef[uid]
+            let info
+            if (status === "admin") {
+                info = `<div class="admin_details">
+                        <p><span class="material-icons remove" id=\"${email}\">remove_circle_outline</span>${email}</p>
+                        <p>&emsp;└ ${uid}</p>
+                        <p>&emsp;└ administrator</p>
+                    </div>`
+            } else if (status === "editor") {
+                info = `<div class="admin_details">
+                        <p>${email}</p>
+                        <p>&emsp;└ ${uid}</p>
+                        <p>&emsp;└ administrator</p>
+                    </div>`
+            }
             adminList.insertAdjacentHTML(
                 "beforeend",
-                `<div class="admin_details">
-                    <p>${email}</p>
-                    <p>&emsp;└ ${uid}</p>
-                    <p>&emsp;└ administrator</p>
-                </div>`
+                info
             )
+
+            document.getElementById(email).addEventListener("click", () => {
+                getStatus().then(status => {
+                    if (status === "admin") {
+                        const removeUsr = functions.httpsCallable("removeRole")
+                        removeUsr({email: email}).then(result => {
+                            alert(result.data.message)
+                            refreshAdminList()
+                        })
+                    } else {
+                        alert("Unauthorized action! Nice try -_-")
+                    }
+                }).catch(error => {
+                    if (error === undefined) {
+                        alert("Unauthorized action! We have backend security too.")
+                    } else {
+                        alert(error.data)
+                    }
+                })
+            })
         }
     })
     let editorRef = new Map()
@@ -128,14 +160,44 @@ function listAdmins() {
         let adminList = document.getElementById("adminList")
         for (uid in editorRef) {
             let email = editorRef[uid]
+            let info
+            if (status === "admin") {
+                info = `<div class="admin_details">
+                        <p><span class="material-icons remove" id=\"${email}\">remove_circle_outline</span>${email}</p>
+                        <p>&emsp;└ ${uid}</p>
+                        <p>&emsp;└ editor</p>
+                    </div>`
+            } else if (status === "editor") {
+                info = `<div class="admin_details">
+                        <p>${email}</p>
+                        <p>&emsp;└ ${uid}</p>
+                        <p>&emsp;└ editor</p>
+                    </div>`
+            }
             adminList.insertAdjacentHTML(
                 "beforeend",
-                `<div class="admin_details">
-                    <p>${email}</p>
-                    <p>&emsp;&boxur; ${uid}</p>
-                    <p>&emsp;&boxur; editor</p>
-                </div>`
+                info
             )
+
+            document.getElementById(email).addEventListener("click", () => {
+                getStatus().then(status => {
+                    if (status === "admin") {
+                        const removeUsr = functions.httpsCallable("removeRole")
+                        removeUsr({email: email}).then(result => {
+                            alert(result.data.message)
+                            refreshAdminList()
+                        })
+                    } else {
+                        alert("Unauthorized action! Nice try -_-")
+                    }
+                }).catch(error => {
+                    if (error === undefined) {
+                        alert("Unauthorized action! We have backend security too.")
+                    } else {
+                        alert(error.data)
+                    }
+                })
+            })
         }
     })
 }
@@ -146,7 +208,7 @@ function show_admin(email, status) {
     }
     document.getElementById("editorContent").style.display = "block"
     
-    listAdmins()
+    listAdmins(status)
     document.getElementById("welcome").insertAdjacentHTML(
         "beforeend",
         `<span id=\"second\">${email}.</span>`
@@ -189,3 +251,27 @@ firebase.auth().onAuthStateChanged(function(user) {
         window.location.href = "index.html"
     }
 })
+
+function getStatus() {
+    return firebase.auth().currentUser.getIdTokenResult().then((idTokenResult) => {
+        console.log(idTokenResult)
+        // Confirm the user is an Admin.
+        if (!!idTokenResult.claims.admin) {
+            return "admin"
+        } else if (!!idTokenResult.claims.editor) {
+            return "editor"
+        } else {
+            document.getElementById("adminContent").style.display = "none"
+            document.getElementById("adminContent").remove()
+            document.getElementById("editorContent").style.display = "none"
+            document.getElementById("editorContent").remove()
+            alert("UNAUTHORIZED ACCESS")
+            window.location.href = "index.html"
+        }
+    }).catch((error) => {
+        let errorCode = error.code
+        let errorMessage = error.message
+        window.alert("ERROR! Code: " + errorCode + "\nInfo: " + errorMessage)
+        console.log(error)
+    })
+}
