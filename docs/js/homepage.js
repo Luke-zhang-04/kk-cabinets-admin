@@ -66,7 +66,8 @@ function login(email, password) {
         }
     });
 }
-document.getElementById("login_button").addEventListener("click", function (_) {
+document.getElementById("login_button").addEventListener("click", function (e) {
+    e.preventDefault()
     var info = [
         document.getElementById("login_email").value,
         document.getElementById("login_password").value,
