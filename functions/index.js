@@ -21,12 +21,23 @@
 
 const functions = require('firebase-functions')
 const admin = require('firebase-admin')
+const nodemailer = require('nodemailer')
+
+const APP_NAME = "KK-Cabinets Admin"
 
 admin.initializeApp({
     databaseURL: "https://kk-cabinets.firebaseio.com/"
 })
 let database = admin.database()
 
+const mailTransport = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: functions.config().gmail.email,
+      pass: functions.config().gmail.password,
+    },
+});
+  
 
 exports.addAdminRole = functions.https.onCall((data, context) => {
     //check for admin creds
@@ -40,6 +51,13 @@ exports.addAdminRole = functions.https.onCall((data, context) => {
         database.ref("editors/" + user.uid).remove()
         return admin.auth().setCustomUserClaims(user.uid, {admin: true, editor: false})
     }).then(() => {
+        const mailOptions = {
+            from: `${APP_NAME} <noreply@firebase.com>`,
+            to: data.email,
+            subject: `Welcome to ${APP_NAME}`,
+            text: `Dear ${data.email}, \nYou've been added to the admin list for the KK Cabinets Administrator page! \nGo to https://kk-cabinets.web.app to read and write to the database.\nSincerly, your KK Cabinets team`
+        }
+        sendEmail(mailTransport, mailOptions)
         return {
             message: `Success! ${data.email} has been made an admin`
         }
@@ -60,6 +78,13 @@ exports.addEditorRole = functions.https.onCall((data, context) => {
         database.ref("admins/" + user.uid).remove()
         return admin.auth().setCustomUserClaims(user.uid, {admin: false, editor: true})
     }).then(() => {
+        const mailOptions = {
+            from: `${APP_NAME} <noreply@firebase.com>`,
+            to: data.email,
+            subject: `Welcome to ${APP_NAME}`,
+            text: `Dear ${data.email}, \nYou've been added to the editor list for the KK Cabinets Administrator page! \nGo to https://kk-cabinets.web.app to read and write to the database.\nSincerly, your KK Cabinets team`
+        };
+        sendEmail(mailTransport, mailOptions)
         return {
             message: `Success! ${data.email} has been made an editor`
         }
@@ -87,3 +112,8 @@ exports.removeRole = functions.https.onCall((data, context) => {
         return err
     })
 })
+
+async function sendEmail(transporter, config) {
+    await transporter.sendMail(config)
+    return null
+}
