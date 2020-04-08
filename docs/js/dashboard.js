@@ -234,6 +234,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                 document.getElementById("editorContent").style.display = "none"
                 document.getElementById("editorContent").remove()
                 alert("UNAUTHORIZED ACCESS")
+                logout()
                 window.location.href = "index.html"
             }
         }).catch((error) => {
