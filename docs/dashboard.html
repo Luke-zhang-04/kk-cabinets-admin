@@ -52,16 +52,18 @@
     </nav>
 
     <div class="container">
-        <div id="status" class="jumbotron">
+        <div id="status" class="jumbotron" style="background-color: rgba(0, 0, 0, 0);">
             <h1 id="welcome">
                 <span id="first">Welcome, </span>
             </h1>
         </div>
     </div>
+
     <div id="adminContent" style="display: none;">
         <div class="container">
             <div class="jumbotron">
-                <h1>Add New Administrator or Moderator</h1>
+                <h1>Add New Administrator or Editor</h1>
+                <p>Admins and Editors both have read and write permissions within the database. However, only admins can add and remove other admins and editors.</p>
                 <p>This new admin or mod must already be a user with kk-cabinets. If not, they must sign up first at <a href="https://kk-cabinets.herokuapp.com/login">kk-cabinets.herokuapp.com/login</a></p>
                 <form class="admin-actions">
                     <div class="form-group">
@@ -88,7 +90,7 @@
     <div id="editorContent" style="display: none;">
         <div class="container">
             <div class="jumbotron" id="adminJumbotron">
-                <h1>All Admins and Editors</h1>
+                <h1 style="margin-bottom: 1rem;">All Admins and Editors</h1>
                 <div class="container overflow-auto" id="adminList">
                     <div class="admin_details">
                         <p>Email</p>
@@ -96,6 +98,12 @@
                         <p>&emsp;&boxur; role</p>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="jumbotron" id="countertop">
+                
             </div>
         </div>
     </div>
