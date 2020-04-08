@@ -128,27 +128,30 @@ function listAdmins(status) {
                 info
             )
 
-            document.getElementById(email).addEventListener("click", () => {
-                getStatus().then(status => {
-                    if (status === "admin") {
-                        const removeUsr = functions.httpsCallable("removeRole")
-                        removeUsr({email: email}).then(result => {
-                            alert(result.data.message)
-                            refreshAdminList()
-                        })
-                    } else {
-                        alert("Unauthorized action! Nice try -_-")
-                    }
-                }).catch(error => {
-                    if (error === undefined) {
-                        alert("Unauthorized action! We have backend security too.")
-                    } else {
-                        alert(error.data)
-                    }
+            if (status === "admin") {
+                document.getElementById(email).addEventListener("click", () => {
+                    getStatus().then(status => {
+                        if (status === "admin") {
+                            const removeUsr = functions.httpsCallable("removeRole")
+                            removeUsr({email: email}).then(result => {
+                                alert(result.data.message)
+                                refreshAdminList()
+                            })
+                        } else {
+                            alert("Unauthorized action! Nice try -_-")
+                        }
+                    }).catch(error => {
+                        if (error === undefined) {
+                            alert("Unauthorized action! We have backend security too.")
+                        } else {
+                            alert(error.data)
+                        }
+                    })
                 })
-            })
+            }
         }
     })
+
     let editorRef = new Map()
     database.ref("editors/").once("value").then(snapshot => {
         if (snapshot.exists()) {
@@ -179,25 +182,27 @@ function listAdmins(status) {
                 info
             )
 
-            document.getElementById(email).addEventListener("click", () => {
-                getStatus().then(status => {
-                    if (status === "admin") {
-                        const removeUsr = functions.httpsCallable("removeRole")
-                        removeUsr({email: email}).then(result => {
-                            alert(result.data.message)
-                            refreshAdminList()
-                        })
-                    } else {
-                        alert("Unauthorized action! Nice try -_-")
-                    }
-                }).catch(error => {
-                    if (error === undefined) {
-                        alert("Unauthorized action! We have backend security too.")
-                    } else {
-                        alert(error.data)
-                    }
+            if (status === "admin") {
+                document.getElementById(email).addEventListener("click", () => {
+                    getStatus().then(status => {
+                        if (status === "admin") {
+                            const removeUsr = functions.httpsCallable("removeRole")
+                            removeUsr({email: email}).then(result => {
+                                alert(result.data.message)
+                                refreshAdminList()
+                            })
+                        } else {
+                            alert("Unauthorized action! Nice try -_-")
+                        }
+                    }).catch(error => {
+                        if (error === undefined) {
+                            alert("Unauthorized action! We have backend security too.")
+                        } else {
+                            alert(error.data)
+                        }
+                    })
                 })
-            })
+            }
         }
     })
 }

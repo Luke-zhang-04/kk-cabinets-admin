@@ -51,7 +51,7 @@ exports.addAdminRole = functions.https.onCall((data, context) => {
 exports.addEditorRole = functions.https.onCall((data, context) => {
     //check for damin creds
     if (!context.auth.token.admin) {
-        return {message: `ERROR! Only admins can add other admins\nThought you could get around security, ${data.email}?`}
+        return {message: `ERROR! Only admins can add other editors\nThought you could get around security, ${data.email}?`}
     }
 
     //get user and add custon claim (editor)
