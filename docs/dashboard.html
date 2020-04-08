@@ -52,7 +52,7 @@
     </nav>
 
     <div class="container">
-        <div class="jumbotron">
+        <div id="status" class="jumbotron">
             <h1 id="welcome">
                 <span id="first">Welcome, </span>
             </h1>
@@ -68,12 +68,18 @@
                         <label for="new-admin-email">Email address</label>
                         <input type="email" class="form-control" id="new-admin-email" aria-describedby="emailHelp" placeholder="Enter email">
                     </div>
-                    <button id="makeButton" type="submit" class="btn btn-warning">Make Admin</button>
+                    <button id="makeAdminButton" class="btn btn-warning">Make Admin</button>
+                    <button id="makeEditorButton" class="btn btn-warning">Make Editor</button>
                 </form>
                 <div id="confirm" style="display: none;">
-                    <p>WARNING! You are about to create a new Administrator. This administrator will have read and write privelleges to the database. Administrators can also capable of REMOVING OTHER ADMINS AND EDITORS. Are you sure you want to proceed?</p>
+                    <p>WARNING! You are about to create a new administrator. This administrator will have read and write privelleges to the database. Administrators can also capable of REMOVING AND ADDING OTHER ADMINS AND EDITORS. Are you sure you want to proceed?</p>
                     <button id="confirmButton" class="btn btn-success">Confirm</button>
                     <button id="cancelButton" class="btn btn-danger">Cancel</button>
+                </div>
+                <div id="confirmEditor" style="display: none;">
+                    <p>WARNING! You are about to create a new editor. This editor will have read and write privelleges to the database. Editors are NOT capable of removing or adding other adminds or editors. Are you sure you want to proceed?</p>
+                    <button id="confirmEditorButton" class="btn btn-success">Confirm</button>
+                    <button id="cancelEditorButton" class="btn btn-danger">Cancel</button>
                 </div>
             </div>
         </div>

@@ -74,6 +74,10 @@ body {
     animation: fadeIn2 ease .75s;
 }
 
+#third {
+    animation: fadeIn3 ease 1s;
+}
+
 #adminContent {
     animation: fadeIn3 ease 1s;
 }

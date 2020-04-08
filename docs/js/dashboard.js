@@ -19,17 +19,24 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-const adminForm = document.querySelector(".admin-actions")
-
-adminForm.addEventListener("submit", (e) => {
+document.getElementById("makeAdminButton").addEventListener("click", (e) => {
     e.preventDefault()
     document.getElementById("confirm").style.display = "block"
-    document.getElementById("makeButton").style.display = "none"
+    document.getElementById("makeAdminButton").style.display = "none"
+    document.getElementById("makeEditorButton").style.display = "none"
+})
+
+document.getElementById("makeEditorButton").addEventListener("click", (e) => {
+    e.preventDefault()
+    document.getElementById("confirmEditor").style.display = "block"
+    document.getElementById("makeAdminButton").style.display = "none"
+    document.getElementById("makeEditorButton").style.display = "none"
 })
 
 document.getElementById("cancelButton").addEventListener("click", () => {
     document.getElementById("confirm").style.display = "none"
-    document.getElementById("makeButton").style.display = "block"
+    document.getElementById("makeAdminButton").style.display = "inline-block"
+    document.getElementById("makeEditorButton").style.display = "inline-block"
 })
 
 document.getElementById("confirmButton").addEventListener("click", () => {
@@ -38,15 +45,42 @@ document.getElementById("confirmButton").addEventListener("click", () => {
 
     addAdminRole({email: adminEmail}).then(result => {
         alert(result.data.message)
+        refreshAdminList()
     }).catch(error => {
         if (error.data === undefined) {
-            alert("ERROR! Only admins can add other admins\nThought we didn't have backend security too?")
+            alert("ERROR! Only admins can add other admins.")
         } else {
             alert(error.data)
         }
     })
     document.getElementById("confirm").style.display = "none"
-    document.getElementById("makeButton").style.display = "block"
+    document.getElementById("makeAdminButton").style.display = "inline-block"
+    document.getElementById("makeEditorButton").style.display = "inline-block"
+})
+
+document.getElementById("cancelEditorButton").addEventListener("click", () => {
+    document.getElementById("confirmEditor").style.display = "none"
+    document.getElementById("makeAdminButton").style.display = "inline-block"
+    document.getElementById("makeEditorButton").style.display = "inline-block"
+})
+
+document.getElementById("confirmEditorButton").addEventListener("click", () => {
+    const editorEmail = document.querySelector("#new-admin-email").value
+    const addEditorRole = functions.httpsCallable("addEditorRole")
+
+    addEditorRole({email: editorEmail}).then(result => {
+        alert(result.data.message)
+        refreshAdminList()
+    }).catch(error => {
+        if (error.data === undefined) {
+            alert("ERROR! Only admins can add other editors.")
+        } else {
+            alert(error.data)
+        }
+    })
+    document.getElementById("confirmEditor").style.display = "none"
+    document.getElementById("makeAdminButton").style.display = "inline-block"
+    document.getElementById("makeEditorButton").style.display = "inline-block"
 })
 
 function logout() {
@@ -55,11 +89,19 @@ function logout() {
     })
 }
 
+function refreshAdminList() {
+    let adminList = document.getElementById("adminList")
+    adminList.innerHTML = "<p>Email</p><p>&emsp;&boxur; user id</p><p>&emsp;&boxur; role</p>"
+    listAdmins()
+}
+
 function listAdmins() {
     let adminRef = new Map()
     database.ref("admins/").once("value").then(snapshot => {
-        for ([i, j] of Object.entries(snapshot.val())) {
-            adminRef[i] = j.email
+        if (snapshot.exists()) {
+            for ([i, j] of Object.entries(snapshot.val())) {
+                adminRef[i] = j.email
+            }
         }
     }).then(() => {
         let adminList = document.getElementById("adminList")
@@ -77,8 +119,10 @@ function listAdmins() {
     })
     let editorRef = new Map()
     database.ref("editors/").once("value").then(snapshot => {
-        for ([i, j] of Object.entries(snapshot.val())) {
-            editorRef[i] = j.email
+        if (snapshot.exists()) {
+            for ([i, j] of Object.entries(snapshot.val())) {
+                editorRef[i] = j.email
+            }
         }
     }).then(() => {
         let adminList = document.getElementById("adminList")
@@ -96,12 +140,16 @@ function listAdmins() {
     })
 }
 
-function show_admin(email) {
+function show_admin(email, status) {
     document.getElementById("adminContent").style.display = "block"
     listAdmins()
     document.getElementById("welcome").insertAdjacentHTML(
         "beforeend",
-        `<span id=\"second\">${email}</span>`
+        `<span id=\"second\">${email}.</span>`
+    )
+    document.getElementById("status").insertAdjacentHTML(
+        "beforeend",
+        `<p id=\"third\">Your status: ${status}</p>`
     )
 }
 
@@ -111,8 +159,10 @@ firebase.auth().onAuthStateChanged(function(user) {
             console.log(idTokenResult)
             // Confirm the user is an Admin.
             if (!!idTokenResult.claims.admin) {
-                show_admin(user.email)
-            } else {
+                show_admin(user.email, "admin")
+            } else if (!!idTokenResult.claims.editor) {
+                show_admin(user.email, "editor")
+            }else {
                 document.getElementById("adminContent").style.display = "none"
                 document.getElementById("adminContent").remove()
                 alert("UNAUTHORIZED ACCESS")
