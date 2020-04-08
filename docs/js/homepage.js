@@ -1,5 +1,5 @@
 /*
-	KK Cabinets
+    KK Cabinets
     Copyright (C) 2020 Luke Zhang, Ethan Lim
     
     https://github.com/Luke-zhang-04
@@ -18,73 +18,65 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
-let provider = new firebase.auth.GoogleAuthProvider()
-
+var provider = new firebase.auth.GoogleAuthProvider();
 //auth state changed
-firebase.auth().onAuthStateChanged(function(user) {
-    //let user = firebase.auth().currentUser
+firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
-        window.location.href = "dashboard.html"
-    } else {
-        // No user is signed in.
+        window.location.href = "dashboard.html";
     }
-})
-
+    else {
+    }
+});
 //sign in with google
 function googleSignin() {
-    let err = false
-    firebase.auth().signInWithPopup(provider).then(function(result) { //sign in with popul
-        let token = result.credential.accessToken
-        let user = result.user
-        console.log(token, user)
-    }).catch(function(error) { //alert error
-       let errorCode = error.code
-       let errorMessage = error.message
-       window.alert("ERROR! Code: " + errorCode + "\nInfo: " + errorMessage)
-       err = true
-    }).then(_ => {
-        window.location.href = "dashboard.html" //redirect
-    })
+    var err = false;
+    firebase.auth().signInWithPopup(provider).then(function (result) {
+        console.log(typeof (result), result);
+        var token = result.credential.accessToken;
+        var user = result.user;
+        console.log(token, user);
+    }).catch(function (error) {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        window.alert("ERROR! Code: " + errorCode + "\nInfo: " + errorMessage);
+        err = true;
+    }).then(function (_) {
+        window.location.href = "dashboard.html"; //redirect
+    });
 }
-
 //logout user
 function logout() {
     firebase.auth().signOut();
-    console.log("succesfully out")
+    console.log("succesfully out");
 }
-
 //log a user in
 function login(email, password) {
-    let err = false
-    firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) { //sign in with email and pswrd
-        var errorCode = error.code
-        var errorMessage = error.message
-        window.alert("ERROR! Code: " + errorCode + "\nInfo: " + errorMessage)
-        err = true
-    }).then(_ => {
+    var err = false;
+    firebase.auth().signInWithEmailAndPassword(email, password).catch(function (error) {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        window.alert("ERROR! Code: " + errorCode + "\nInfo: " + errorMessage);
+        err = true;
+    }).then(function (_) {
         if (!err) {
-            window.location.href = "dashboard.html" //redirect
+            window.location.href = "dashboard.html"; //redirect
         }
-    })
+    });
 }
-
-document.getElementById("login_button").addEventListener("click", _ => {
-    let info = [
+document.getElementById("login_button").addEventListener("click", function (_) {
+    var info = [
         document.getElementById("login_email").value,
         document.getElementById("login_password").value,
-    ]
-    login(...info)
-})
-
+    ];
+    login.apply(void 0, info);
+});
 //google login button
-document.getElementById("login_google").addEventListener("click", _ => {
-    googleSignin()
-})
-
-document.getElementById("login_password").addEventListener("keydown", function(event) {
+document.getElementById("login_google").addEventListener("click", function (_) {
+    googleSignin();
+});
+document.getElementById("login_password").addEventListener("keydown", function (event) {
     if (event.keyCode === 13) {
-        event.preventDefault()
-        document.getElementById("login_button").click()
+        event.preventDefault();
+        document.getElementById("login_button").click();
     }
-})
+});
