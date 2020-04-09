@@ -83,12 +83,6 @@ document.getElementById("confirmEditorButton").addEventListener("click", () => {
     document.getElementById("makeEditorButton").style.display = "inline-block"
 })
 
-function logout() {
-    firebase.auth().signOut().then(() => {
-        console.log("Sucessfully Logged Out")
-    })
-}
-
 function refreshAdminList() {
     let adminList = document.getElementById("adminList")
     adminList.innerHTML = "<div class=\"admin_details\"><p>Email</p><p>&emsp;&boxur; user id</p><p>&emsp;&boxur; role</p></div>"
@@ -222,62 +216,4 @@ function show_admin(email, status) {
         "beforeend",
         `<p id=\"third\">Your status: ${status}</p>`
     )
-}
-
-firebase.auth().onAuthStateChanged(function(user) {
-    if (user) {
-        firebase.auth().currentUser.getIdTokenResult().then((idTokenResult) => {
-            console.log(idTokenResult)
-            // Confirm the user is an Admin.
-            if (!!idTokenResult.claims.admin) {
-                show_admin(user.email, "admin")
-            } else if (!!idTokenResult.claims.editor) {
-                show_admin(user.email, "editor")
-            }else {
-                document.getElementById("adminContent").style.display = "none"
-                document.getElementById("adminContent").remove()
-                document.getElementById("editorContent").style.display = "none"
-                document.getElementById("editorContent").remove()
-                alert("UNAUTHORIZED ACCESS")
-                logout()
-                window.location.href = "index.html"
-            }
-        }).catch((error) => {
-            let errorCode = error.code
-            let errorMessage = error.message
-            window.alert("ERROR! Code: " + errorCode + "\nInfo: " + errorMessage)
-            console.log(error)
-        })
-    } else {
-        document.getElementById("adminContent").style.display = "none"
-        document.getElementById("adminContent").remove()
-        document.getElementById("editorContent").style.display = "none"
-        document.getElementById("editorContent").remove()
-        alert("UNAUTHORIZED ACCESS")
-        window.location.href = "index.html"
-    }
-})
-
-function getStatus() {
-    return firebase.auth().currentUser.getIdTokenResult().then((idTokenResult) => {
-        console.log(idTokenResult)
-        // Confirm the user is an Admin.
-        if (!!idTokenResult.claims.admin) {
-            return "admin"
-        } else if (!!idTokenResult.claims.editor) {
-            return "editor"
-        } else {
-            document.getElementById("adminContent").style.display = "none"
-            document.getElementById("adminContent").remove()
-            document.getElementById("editorContent").style.display = "none"
-            document.getElementById("editorContent").remove()
-            alert("UNAUTHORIZED ACCESS")
-            window.location.href = "index.html"
-        }
-    }).catch((error) => {
-        let errorCode = error.code
-        let errorMessage = error.message
-        window.alert("ERROR! Code: " + errorCode + "\nInfo: " + errorMessage)
-        console.log(error)
-    })
 }
