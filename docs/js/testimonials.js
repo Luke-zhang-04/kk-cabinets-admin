@@ -39,3 +39,19 @@ document.getElementById("new_testimonial").addEventListener("submit", form => {
 
     input.value = ""
 })
+
+function listTestimonials() {
+    const testList = document.getElementById("testimonialsList")
+
+    db.collection("testimonials").get().then(snapshot => {
+        const data = snapshot.docs[0].data()
+        for (i of Object.values(data)) {
+            testList.insertAdjacentHTML(
+                "beforeend",
+                `<p>${i}</p>`
+            )
+        }
+    })
+}
+
+listTestimonials()
