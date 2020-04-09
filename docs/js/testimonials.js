@@ -43,8 +43,12 @@ document.getElementById("new_testimonial").addEventListener("submit", form => {
 })
 
 function refreshTestimonials() {
-    document.getElementById("testimonialsList").innerHTML = ""
-    listTestimonials()
+    getStatus().then(status => {
+        if (status === "admin" || status === "editor") {
+            document.getElementById("testimonialsList").innerHTML = ""
+            listTestimonials()
+        }
+    })
 }
 
 function listTestimonials() {
@@ -86,4 +90,8 @@ function listTestimonials() {
     })
 }
 
-listTestimonials()
+getStatus().then(status => {
+    if (status === "admin" || status === "editor") {
+        listTestimonials()
+    }
+})
