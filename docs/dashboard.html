@@ -61,8 +61,9 @@
 
     <div id="adminContent" style="display: none;">
         <div class="container">
+            <h1>Permissions</h1>
             <div class="jumbotron">
-                <h1>Add New Administrator or Editor</h1>
+                <h2>Add New Administrator or Editor</h2>
                 <p>Admins and Editors both have read and write permissions within the database. However, only admins can add and remove other admins and editors.</p>
                 <p>This new admin or mod must already be a user with kk-cabinets. If not, they must sign up first at <a href="https://kk-cabinets.herokuapp.com/login">kk-cabinets.herokuapp.com/login</a></p>
                 <form class="admin-actions">
@@ -90,7 +91,7 @@
     <div id="editorContent" style="display: none;">
         <div class="container">
             <div class="jumbotron" id="adminJumbotron">
-                <h1 style="margin-bottom: 1rem;">All Admins and Editors</h1>
+                <h2 style="margin-bottom: 1rem;">All Admins and Editors</h2>
                 <div class="container overflow-auto overflow-auto-side jumbotron-white" id="adminList">
                     <div class="admin_details">
                         <p>Email</p>
@@ -102,7 +103,9 @@
         </div>
 
         <div class="container">
+            <h1>Testimonials</h1>
             <div class="jumbotron" id="testimonials">
+                <h2>Add new Testimonial</h2>
                 <form id="new_testimonial">
                     <div class="form-group">
                         <label for="new_testimonial_input">New Testimonial</label>
@@ -110,12 +113,7 @@
                         <button type="submit" class="btn btn-success">Add to Database</button>
                     </div>
                 </form>
-            </div>
-        </div>
-
-        <div class="container">
-            <div class="jumbotron">
-                <h1 style="margin-bottom: 1rem;">All testimonials</h1>
+                <h2 style="margin-bottom: 1rem;">All testimonials</h2>
                 <div class="jumbotron jumbotron-white overflow-auto" id="testimonialsList">
                 </div>
             </div>

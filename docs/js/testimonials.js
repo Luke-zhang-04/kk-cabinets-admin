@@ -35,21 +35,53 @@ document.getElementById("new_testimonial").addEventListener("submit", form => {
         db.collection("testimonials").doc("testimonials").update({
             ...newData
         })
+    }).then(() => {
+        refreshTestimonials()
     })
 
     input.value = ""
 })
+
+function refreshTestimonials() {
+    document.getElementById("testimonialsList").innerHTML = ""
+    listTestimonials()
+}
 
 function listTestimonials() {
     const testList = document.getElementById("testimonialsList")
 
     db.collection("testimonials").get().then(snapshot => {
         const data = snapshot.docs[0].data()
-        for (i of Object.values(data)) {
+        for ([key, value] of Object.entries(data)) {
             testList.insertAdjacentHTML(
                 "beforeend",
-                `<p>${i}</p>`
+                `<div class=\"row\">
+                    <div class=\"col-1\">
+                        <span class="material-icons remove" id=\"testimonial${key}\">remove_circle_outline</span>
+                    </div>
+                    <div class=\"col-11\">
+                        <p>${value}</p>
+                    </div>
+                </div>`
             )
+            const id = key
+            document.getElementById(`testimonial${id}`).addEventListener("click", () => {
+                //for deleting data
+                if(confirm("Are you sure you want to delete this testimonial?")) {
+                    db.collection("testimonials").get().then(snapshot => {
+                        const data = snapshot.docs[0].data()
+                        const largest = max(Object.keys(data)).toString()
+                        let dataForAdd = new Map()
+                        dataForAdd[id] = data[largest]
+                        dataForAdd[largest] = firebase.firestore.FieldValue.delete()
+                        db.collection("testimonials").doc("testimonials").update({
+                            ...dataForAdd
+                        }).then(() => {
+                            refreshTestimonials()
+                        })
+                    })
+                }
+            })
         }
     })
 }
