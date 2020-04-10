@@ -24,22 +24,26 @@ document.getElementById("new_testimonial").addEventListener("submit", form => {
 
     const input = document.getElementById("new_testimonial_input")
     const value = input.value
-    
-    db.collection("testimonials").get().then(snapshot => {
-        const data = snapshot.docs[0].data()
-        const largest = (max(Object.keys(data)) + 1).toString()
 
-        let newData = new Map()
-        newData[largest] = value
+    if (value) {
+        db.collection("testimonials").get().then(snapshot => {
+            const data = snapshot.docs[0].data()
+            const largest = (max(Object.keys(data)) + 1).toString()
 
-        db.collection("testimonials").doc("testimonials").update({
-            ...newData
+            let newData = new Map()
+            newData[largest] = value
+
+            db.collection("testimonials").doc("testimonials").update({
+                ...newData
+            })
+        }).then(() => {
+            refreshTestimonials()
         })
-    }).then(() => {
-        refreshTestimonials()
-    })
 
-    input.value = ""
+        input.value = ""
+    } else {
+        alert("Please fill in all fields")
+    }
 })
 
 function refreshTestimonials() {
