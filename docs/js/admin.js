@@ -126,11 +126,13 @@ function listAdmins(status) {
                 document.getElementById(email).addEventListener("click", () => {
                     getStatus().then(status => {
                         if (status === "admin") {
-                            const removeUsr = functions.httpsCallable("removeRole")
-                            removeUsr({email: email}).then(result => {
-                                alert(result.data.message)
-                                refreshAdminList()
-                            })
+                            if (confirm(`Are you sure you want to remove ${email}?`)) {
+                                const removeUsr = functions.httpsCallable("removeRole")
+                                removeUsr({email: email}).then(result => {
+                                    alert(result.data.message)
+                                    refreshAdminList()
+                                })
+                            }
                         } else {
                             alert("Unauthorized action! Nice try -_-")
                         }
@@ -180,11 +182,13 @@ function listAdmins(status) {
                 document.getElementById(email).addEventListener("click", () => {
                     getStatus().then(status => {
                         if (status === "admin") {
-                            const removeUsr = functions.httpsCallable("removeRole")
-                            removeUsr({email: email}).then(result => {
-                                alert(result.data.message)
-                                refreshAdminList()
-                            })
+                            if (confirm(`Are you sure you want to remove ${email}?`)) {
+                                const removeUsr = functions.httpsCallable("removeRole")
+                                removeUsr({email: email}).then(result => {
+                                    alert(result.data.message)
+                                    refreshAdminList()
+                                })
+                            }
                         } else {
                             alert("Unauthorized action! Nice try -_-")
                         }
