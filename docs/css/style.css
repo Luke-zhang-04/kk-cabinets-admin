@@ -51,10 +51,6 @@
     --paper: #f4f4f4;
   }
 
-body {
-    background-color: var(--paper);
-}
-
 .logo {
     display: block;
     margin-left: auto;
@@ -219,4 +215,52 @@ body {
 
 #testimonialsList {
     max-height: 75vh;
+}
+
+.responive_row {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0 4px;
+}
+  
+  /* Create four equal columns that sits next to each other */
+.responsive_column {
+    flex: 25%;
+    max-width: 25%;
+    padding: 0 4px;
+  }
+  
+.responsive_column img {
+    margin-top: 8px;
+    vertical-align: middle;
+    width: 100%;
+    cursor: pointer;
+    z-index: 10;
+}
+
+/* Responsive layout - makes a two column-layout instead of four columns */
+@media screen and (max-width: 800px) {
+    .responsive_column {
+        flex: 50%;
+        max-width: 50%;
+    }
+}
+  
+/* Responsive layout - makes the two columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 600px) {
+    .column {
+        flex: 100%;
+        max-width: 100%;
+    }
+}
+
+.image_container .details {
+    color: #373737;
+    background-color: var(--paper);
+    padding: 0 5%;
+    font-size: 20px;
+    z-index: 1;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height .5s ease-in-out;
 }

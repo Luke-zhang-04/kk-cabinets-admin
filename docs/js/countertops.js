@@ -34,3 +34,55 @@ document.getElementById("new_countertop").addEventListener("submit", e => {
         alert("Please fill in all fields")
     }
 })
+
+//makes information drop down
+function expandCountertop(key) {
+    let element = document.getElementById("countertop" + key)
+    let container = element.getElementsByClassName("details")[0]
+    if (container.style.maxHeight){
+        container.style.maxHeight = null;
+    } else {
+        container.style.maxHeight = container.scrollHeight + "px";
+    }
+}
+
+function listCountertops(counter = 0) {
+    let cur = counter+1
+    const column = document.getElementById("countertopsList")
+        .getElementsByClassName("responsive_column")[counter%4]
+
+    const storageRef = storage.ref("countertops")
+
+    db.collection("countertops").doc(counter.toString()).get().then(doc => {
+        if (doc.exists) {
+            const data = doc.data()
+            const imgRef = data.file
+            const imgURL = storageRef.child(imgRef)
+            const id = counter
+            const elem = column
+            imgURL.getDownloadURL().then(url => {
+                elem.insertAdjacentHTML(
+                    "beforeend",
+                    "<div class=\"image_container\" id=countertop" + id + "><img onclick=\"expandCountertop(" + id + ")\"src=\""+ url + "\"/></div>"
+                )
+
+                //attach information to image
+                let element = document.getElementById(`countertop${id}`) //shortcut for target element
+
+                //append information to element
+                element.insertAdjacentHTML(
+                    "beforeend",
+                    "<div class=\"details\"><p>" + data["caption"] + "<p></div>"
+                )
+            })
+        } else {
+            cur = null
+        }
+    }).catch(error => {
+        alert("ERROR! " + error)
+    }).then(() => {
+        if (cur) listCountertops(cur)
+    })    
+}
+
+listCountertops()
