@@ -31,6 +31,7 @@
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="icon" href="pictures/logo-transparent-cropped.png">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="js/functions.js"></script>
 </head>
 
 <body>
@@ -69,7 +70,7 @@
                 <form class="admin-actions">
                     <div class="form-group">
                         <label for="new-admin-email">Email address</label>
-                        <input type="email" class="form-control" id="new-admin-email" aria-describedby="emailHelp" placeholder="Enter email">
+                        <input type="email" class="form-control" id="new-admin-email" placeholder="Enter email">
                     </div>
                     <button id="makeAdminButton" class="btn btn-warning">Make Admin</button>
                     <button id="makeEditorButton" class="btn btn-warning">Make Editor</button>
@@ -109,13 +110,33 @@
                 <form id="new_testimonial">
                     <div class="form-group">
                         <label for="new_testimonial_input">New Testimonial</label>
-                        <input type="text" class="form-control" id="new_testimonial_input" aria-describedby="newTestimonial" placeholder="Enter new testimonial">
+                        <input type="text" class="form-control" id="new_testimonial_input" placeholder="Enter new testimonial">
                         <button type="submit" class="btn btn-success">Add to Database</button>
                     </div>
                 </form>
+
                 <h2 style="margin-bottom: 1rem;">All testimonials</h2>
-                <div class="jumbotron jumbotron-white overflow-auto" id="testimonialsList">
-                </div>
+                <div class="jumbotron jumbotron-white overflow-auto" id="testimonialsList"></div>
+            </div>
+        </div>
+
+        <div class="container">
+            <h1>Countertops</h1>
+            <div class="jumbotron" id="countertops">
+                <h2>Add new Countertops</h2>
+                <form id="new_countertop">
+                    <div class="form-group">
+                        <label for="newCountertopImg">New Countertop Image</label><br/>
+                        <progress id="uploader" value="0" max="100">0%</progress>
+                        <input type="file" class="form-control-file" id="newCountertopImg">
+                        <lable for="newCountertopCaption">New Countertop Caption</lable>
+                        <input type="text" class="form-control" id="newCountertopCaption" placeholder="Enter caption">
+                        <button type="submit" class="btn btn-success">Add to Database</button>
+                    </div>
+                </form>
+
+                <h2 style="margin-bottom: 1rem;">All Countertops</h2>
+                <div class="jumbotron jumbotron-white overflow-auto" id="testimonialsList"></div>
             </div>
         </div>
     </div>
@@ -154,9 +175,10 @@
     <script src="js/jquery.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="js/bootstrap.js"></script>
-    <script src="js/app.js"></script>
+
     <script src="js/auth.js"></script>
     <script src="js/admin.js"></script>
     <script src="js/testimonials.js"></script>
+    <script src="js/countertops.js"></script>
 </body>
 </html>
