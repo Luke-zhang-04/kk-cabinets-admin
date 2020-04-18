@@ -58,7 +58,7 @@
     width: 25vw;
 }
 
-#adminList {
+#adminList, #testimonialsList, #countertopsList {
     max-height: 75vh;
 }
 
@@ -211,10 +211,6 @@
 
 .jumbotron-white {
     background-color: white !important;
-}
-
-#testimonialsList {
-    max-height: 75vh;
 }
 
 .responive_row {

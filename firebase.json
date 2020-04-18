@@ -1,11 +1,11 @@
 {
-    "hosting": {
-        "public": "docs", 
-        "ignore": [
-            "firebase.json",
-            "**/.*",
-            "**/node_modules/**",
-            "**/functions/**"
-        ]
-    }
+  "hosting": {
+    "target": "admin",
+    "public": "docs",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  }
 }
