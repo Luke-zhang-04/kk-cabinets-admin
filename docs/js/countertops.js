@@ -109,7 +109,9 @@ function listCountertops(counter = 0) {
                 document.getElementById(`removeCountertop${id}`).addEventListener("click", () => {
                     if (confirm("Are you sure you want to remove this countertop?")) {
                         db.collection("countertops").get().then(snapshot => {
-                            
+                            const data = snapshot.docs[id].data()
+                            const largest = max(Object.keys(data)).toString()
+                            console.log(largest)
                         })
                     }
                 }) 
