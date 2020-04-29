@@ -48,8 +48,8 @@ document.getElementById("new_countertop").addEventListener("submit", e => {
                 var percentage = (cur.bytesTransferred/cur.totalBytes)*100
                 uploader.value = percentage
             })
-        }).catch(error => {
-            console.log("ERROR", error)
+        }).catch(err => {
+            alert("An error occured: ", err)
         })
     } else {
         alert("Please fill in all fields")
@@ -109,19 +109,41 @@ function listCountertops(counter = 0) {
                 document.getElementById(`removeCountertop${id}`).addEventListener("click", () => {
                     if (confirm("Are you sure you want to remove this countertop?")) {
                         db.collection("countertops").get().then(snapshot => {
-                            const data = snapshot.docs[id].data()
-                            const largest = max(Object.keys(data)).toString()
-                            console.log(largest)
+                            let data
+                            for (doc of snapshot.docs) {
+                                if (doc.id == id) {
+                                    data = doc.data()
+                                    break
+                                }
+                            }
+                            const largest = max(Object.keys(snapshot.docs)).toString()
+                            const file = data.file
+                            console.log(id, data)
+                            db.collection("countertops").doc(id.toString()).delete().then(() => {
+                                storageRef.child(file).delete().then(() => {
+                                    for (i of document.getElementById("countertopsList").getElementsByClassName("responsive_column")) {
+                                        i.innerHTML = ""
+                                    }
+                                    listCountertops()
+                                }).catch(err => {
+                                    alert("An error occured:", err)
+                                })
+                            }).catch(err => {
+                                alert("An error occured: ", err)
+                            })
                         })
                     }
                 }) 
+            }).catch(err => {
+                console.log(err)
+                alert("An error occured:", err)
             })
 
         } else {
             cur = null
         }
-    }).catch(error => {
-        alert("ERROR! " + error)
+    }).catch(err => {
+        alert("An error occured: ", err)
     }).then(() => {
         if (cur) listCountertops(cur)
     })    

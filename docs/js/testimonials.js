@@ -38,6 +38,8 @@ document.getElementById("new_testimonial").addEventListener("submit", form => {
             })
         }).then(() => {
             refreshTestimonials()
+        }).catch(err => {
+            alert("An error occured: ", err)
         })
 
         input.value = ""
@@ -87,6 +89,8 @@ function listTestimonials() {
                 }
             })
         }
+    }).catch(err => {
+        alert("An error occured: ", err)
     })
 }
 listTestimonials()
