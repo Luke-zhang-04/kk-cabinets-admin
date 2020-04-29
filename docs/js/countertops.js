@@ -59,7 +59,7 @@ document.getElementById("new_countertop").addEventListener("submit", e => {
 //makes information drop down
 function expandCountertop(key) {
     let element = document.getElementById("countertop" + key)
-    let container = element.getElementsByClassName("details")[0]
+    let container = element.querySelector(".details")[0]
     if (container.style.maxHeight){
         container.style.maxHeight = null;
     } else {
@@ -79,7 +79,7 @@ function refreshCountertops() {
 }
 
 function listCountertops(counter = 0) {
-    let cur = counter+1
+    let cur = counter + 1
     const column = document.getElementById("countertopsList")
         .getElementsByClassName("responsive_column")[counter%4]
 
@@ -104,7 +104,7 @@ function listCountertops(counter = 0) {
                 //append information to element
                 element.insertAdjacentHTML(
                     "beforeend",
-                    `<div class=\"details\"><span class=\"material-icons remove\" id=\"removeCountertop${id}\">remove_circle_outline</span><p>${data["caption"]}<p></div>`
+                    `<div class=\"details\"><span class=\"material-icons remove\" id=\"removeCountertop${id}\">remove_circle_outline</span><p>${data["caption"]}</p></div>`
                 )
             }).then(() => {
                 document.getElementById(`removeCountertop${id}`).addEventListener("click", () => { //remove countertop

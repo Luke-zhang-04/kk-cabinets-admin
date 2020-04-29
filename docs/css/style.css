@@ -58,7 +58,7 @@
     width: 25vw;
 }
 
-#adminList, #testimonialsList, #countertopsList {
+#adminList, #testimonialsList, #countertopsList, #galleryList {
     max-height: 75vh;
 }
 

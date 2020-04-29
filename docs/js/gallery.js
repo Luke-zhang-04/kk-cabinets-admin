@@ -19,3 +19,89 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+document.getElementById("new_gallery_entry").addEventListener("submit", e => {
+    e.preventDefault()
+
+})
+
+function expandGallery(key) {
+    let element = document.getElementById("gallery" + key)
+    let container = element.querySelector(".details")
+    if (container.style.maxHeight){
+        container.style.maxHeight = null;
+    } else {
+        container.style.maxHeight = container.scrollHeight + "px";
+    }
+}
+
+function refreshGallery() {
+    document.getElementById("galleryList").querySelector(".responsive_row").innerHTML = ""
+    for (let i = 0; i < 4; i++) {
+        document.getElementById("galleryList").querySelector(".responsive_row").insertAdjacentHTML(
+            "beforeend",
+            "<div class=\"responsive_column\"></div>"
+        )
+    }
+    listGallery()
+}
+
+function listGallery(counter = 0) {
+    let cur = counter + 1
+    const column = document.getElementById("galleryList")
+        .getElementsByClassName("responsive_column")[counter%4]
+    
+    const storageRef = storage.ref("gallery")
+
+    db.collection("gallery").doc(counter.toString()).get().then(doc => {
+        if (doc.exists) {
+            const data = doc.data()
+            const imgRef = data.file
+            const imgURL = storageRef.child(imgRef)
+            const id = counter
+            const elem = column
+            let furniture
+
+
+            if (data.details.furniture.cabinet && data.details.furniture.countertop) {
+                furniture = "Cabinets, countertops"
+            } else if (data.details.furniture.cabinet) {
+                furniture = "Cabinets"
+            } else if (data.details.furniture.countertop) {
+                furniture = "Countertops"
+            } else {
+                furniture = "none"
+            }
+
+            imgURL.getDownloadURL().then(url => {
+                elem.insertAdjacentHTML(
+                    "beforeend",
+                    "<div class=\"image_container\" id=gallery" + id + "><img onclick=\"expandGallery(" + id + ")\"src=\""+ url + "\"/></div>"
+                )
+
+                //attach information to image
+                let element = document.getElementById(`gallery${id}`) //shortcut for target element
+
+                //append information to element
+                element.insertAdjacentHTML(
+                    "beforeend",
+                    `<div class=\"details\"><span class=\"material-icons remove\" id=\"removeGallery${id}\">remove_circle_outline</span>
+                        <p>Colour: ${data.details.colour.charAt(0).toUpperCase() + data.details.colour.slice(1)}</p>
+                        <p>Furniture: ${furniture}</p>
+                        <p>Location: ${data.details.location.charAt(0).toUpperCase() + data.details.location.slice(1)}</p>
+                        <p>Material: ${data.details.material.charAt(0).toUpperCase() + data.details.material.slice(1)}</p>
+                        <p>Pattern: ${(data.details.pattern ? "yes" : "no")}</p>
+                    </div>`
+                )
+            })
+        } else {
+            cur = null
+        }
+    }).catch(err => {
+        console.log(err)
+        alert("An error occured. Check console for more details. " + err.message_)
+    }).then(() => {
+        if (cur) listGallery(cur)
+    })
+}
+
+listGallery()
