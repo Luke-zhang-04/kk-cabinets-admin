@@ -34,22 +34,22 @@ document.getElementById("new_countertop").addEventListener("submit", e => {
             const caption = document.getElementById("newCountertopCaption").value
             let newData = new Map()
             newData["caption"] = caption
-            newData["file"] = `${largest}.jpg`
-            db.collection("countertops").doc(largest).set({
+            newData["file"] = `${Date.now()}.jpg`
+            return db.collection("countertops").doc(largest).set({
                 ...newData
-            })
-        }).then(() => {
-            const storageRef = storage.ref("countertops/").child(`${largest}.jpg`)
+            }).then(() => {return newData})
+        }).then(newData => {
+            const storageRef = storage.ref("countertops/").child(newData["file"])
             console.log(largest)
-            const uploader = document.getElementById('uploader')
             const file = document.getElementById("newCountertopImg").files[0]
             let task = storageRef.put(file)
-            task.on('state_changed', function progress(cur) {
-                var percentage = (cur.bytesTransferred/cur.totalBytes)*100
-                uploader.value = percentage
+            Promise.resolve(task).then(() => {
+                alert("Success!")
+                refreshCountertops()
             })
         }).catch(err => {
-            alert("An error occured: ", err)
+            console.log(err)
+            alert("An error occured. Check console for more details. " + err.message_)
         })
     } else {
         alert("Please fill in all fields")
@@ -68,13 +68,14 @@ function expandCountertop(key) {
 }
 
 function refreshCountertops() {
-    document.getElementById("countertopsList").querySelector("responsive_row").innerHTML = ""
-    for (let i = 0; i < 3; i++) {
-        document.getElementById("countertopsList").querySelector("responsive_row").insertAdjacentHTML(
+    document.getElementById("countertopsList").querySelector(".responsive_row").innerHTML = ""
+    for (let i = 0; i < 4; i++) {
+        document.getElementById("countertopsList").querySelector(".responsive_row").insertAdjacentHTML(
             "beforeend",
             "<div class=\"responsive_column\"></div>"
         )
     }
+    listCountertops()
 }
 
 function listCountertops(counter = 0) {
@@ -106,44 +107,67 @@ function listCountertops(counter = 0) {
                     `<div class=\"details\"><span class=\"material-icons remove\" id=\"removeCountertop${id}\">remove_circle_outline</span><p>${data["caption"]}<p></div>`
                 )
             }).then(() => {
-                document.getElementById(`removeCountertop${id}`).addEventListener("click", () => {
+                document.getElementById(`removeCountertop${id}`).addEventListener("click", () => { //remove countertop
                     if (confirm("Are you sure you want to remove this countertop?")) {
                         db.collection("countertops").get().then(snapshot => {
-                            let data
+                            let data //data of object to be deleted
                             for (doc of snapshot.docs) {
                                 if (doc.id == id) {
                                     data = doc.data()
                                     break
                                 }
                             }
-                            const largest = max(Object.keys(snapshot.docs)).toString()
+                            const largest = max(Object.keys(snapshot.docs)).toString() //largest key
+                            let largestData
+
+                            for (doc of snapshot.docs) { //data of object with largest id
+                                if (doc.id == largest) {
+                                    largestData = doc.data()
+                                    break
+                                }
+                            }
+
                             const file = data.file
-                            console.log(id, data)
-                            db.collection("countertops").doc(id.toString()).delete().then(() => {
-                                storageRef.child(file).delete().then(() => {
-                                    for (i of document.getElementById("countertopsList").getElementsByClassName("responsive_column")) {
-                                        i.innerHTML = ""
-                                    }
-                                    listCountertops()
+                            
+                            let dataForAdd = new Map()
+                            
+                            for (i of Object.keys(largestData)) {
+                                dataForAdd[i] = largestData[i]
+                            }
+                            
+                            storageRef.child(file).delete().then(() => {
+                                db.collection("countertops").doc(id.toString()).set({
+                                    ...dataForAdd
+                                }).then(() => {
+                                    db.collection("countertops").doc(largest.toString()).delete().then(() => {
+                                        alert("Success!")
+                                        refreshCountertops()
+                                    }).catch(err => {
+                                        console.log(err)
+                                        alert("An error occured. Check console for more details. " + err.message_)
+                                    })
                                 }).catch(err => {
-                                    alert("An error occured:", err)
+                                    console.log(err)
+                                    alert("An error occured. Check console for more details. " + err.message_)
                                 })
                             }).catch(err => {
-                                alert("An error occured: ", err)
+                                console.log(err)
+                                alert("An error occured. Check console for more details. " + err.message_)
                             })
                         })
                     }
                 }) 
             }).catch(err => {
                 console.log(err)
-                alert("An error occured:", err)
+                alert("An error occured. Check console for more details. " + err.message_)
             })
 
         } else {
             cur = null
         }
     }).catch(err => {
-        alert("An error occured: ", err)
+        console.log(err)
+        alert("An error occured. Check console for more details. " + err.message_)
     }).then(() => {
         if (cur) listCountertops(cur)
     })    

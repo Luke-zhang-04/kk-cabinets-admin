@@ -83,7 +83,10 @@ function listTestimonials() {
                         db.collection("testimonials").doc("testimonials").update({
                             ...dataForAdd
                         }).then(() => {
+                            alert("Success!")
                             refreshTestimonials()
+                        }).catch(err => {
+                            alert("An error occured: ", err)
                         })
                     })
                 }
