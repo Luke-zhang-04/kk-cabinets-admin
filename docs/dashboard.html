@@ -127,9 +127,9 @@
                 <form id="new_countertop">
                     <div class="form-group">
                         <label for="newCountertopImg">New Countertop Image</label><br/>
-                        <input type="file" class="form-control-file" id="newCountertopImg">
-                        <lable for="newCountertopCaption">New Countertop Caption</lable>
-                        <input type="text" class="form-control" id="newCountertopCaption" placeholder="Enter caption">
+                        <input type="file" class="form-group-file" id="newCountertopImg"><br/>
+                        <label class="form-group-label" for="newCountertopCaption">New Countertop Caption</label>
+                        <input type="text" class="form-group-input" id="newCountertopCaption" placeholder="Enter caption"><br/>
                         <button type="submit" class="btn btn-success">Add to Database</button>
                     </div>
                 </form>
@@ -143,6 +143,39 @@
                         <div class="responsive_column"></div>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <h1>Gallery</h1>
+            <div class="jumbotron" id="gallery">
+                <h2>Add new projects to gallery</h2>
+                <form id="new_gallery_entry">
+                    <div class="form-group">
+                        <label for="newGalleryImg">New Gallery Image</label><br/>
+                        <input type="file" class="form-group-file" id="newGalleryImg"><br/>
+
+                        <label class="form-group-label" for="newGalleryColour">Colour</label>
+                        <input type="text" class="form-group-input" id="newGalleryColour" placeholder="Enter colour"><br/>
+
+                        <label class="form-group-label" for="newGalleryCabinet">Cabinets</label>
+                        <input type="checkbox" class="form-group-input" id="newGalleryCabinet"><br/>
+
+                        <label class="form-group-label" for="newGalleryCountertop">Countertops</label>
+                        <input type="checkbox" class="form-group-input" id="newGalleryCountertop"><br/>
+
+                        <label class="form-group-label" for="newGalleryLocation">Location</label>
+                        <input type="text" class="form-group-input" id="newGalleryLocation" placeholder="Enter Location"><br/>
+
+                        <label class="form-group-label" for="newGalleryMaterial">Material</label>
+                        <input type="text" class="form-group-input" id="newGalleryMaterial" placeholder="Enter Material"><br/>
+
+                        <label class="form-group-label" for="newGalleryPattern">Pattern</label>
+                        <input type="checkbox" class="form-group-input" id="newGalleryPattern"><br/>
+
+                        <button type="submit" class="btn btn-success">Add to Database</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
