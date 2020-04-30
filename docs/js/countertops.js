@@ -25,11 +25,8 @@ document.getElementById("new_countertop").addEventListener("submit", e => {
     if (document.getElementById("newCountertopCaption").value && document.getElementById("newCountertopImg")) {
         db.collection("countertops").get().then(snapshot => {
             const data = snapshot.docs
-            let keys = []
-            for (i of data) {
-                keys.push(i.id)
-            }
-            largest = (max(keys) + 1).toString()
+
+            largest = (max(Object.keys(data)) + 1).toString()
 
             const caption = document.getElementById("newCountertopCaption").value
             let newData = new Map()
@@ -40,7 +37,6 @@ document.getElementById("new_countertop").addEventListener("submit", e => {
             }).then(() => {return newData})
         }).then(newData => {
             const storageRef = storage.ref("countertops/").child(newData["file"])
-            console.log(largest)
             const file = document.getElementById("newCountertopImg").files[0]
             let task = storageRef.put(file)
             Promise.resolve(task).then(() => {

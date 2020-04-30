@@ -21,8 +21,53 @@
 
 document.getElementById("new_gallery_entry").addEventListener("submit", e => {
     e.preventDefault()
+    let largest
+    if (checkGalleryForm()) {
+        db.collection("gallery").get().then(snapshot => {
+            const data = snapshot.docs
 
+            largest = (max(Object.keys(data)) + 1).toString()
+
+
+            const newData = new Map()
+            newData["file"] = `${Date.now()}.jpg`
+            newData["details"] = {
+                "colour": document.getElementById("newGalleryColour").value.toLowerCase(),
+                "furniture": {
+                    "cabinet": document.getElementById("newGalleryCabinet").checked,
+                    "countertop": document.getElementById("newGalleryCountertop").checked
+                },
+                "location": document.getElementById("newGalleryLocation").value.toLowerCase(),
+                "material": document.getElementById("newGalleryMaterial").value.toLowerCase(),
+                "pattern": document.getElementById("newGalleryPattern").checked
+            }
+
+            return db.collection("gallery").doc(largest).set({
+                ...newData
+            }).then(() => {return newData})
+        }).then(newData => {
+            const storageRef = storage.ref("gallery/").child(newData["file"])
+            const file = document.getElementById("newGalleryImg").files[0]
+            let task = storageRef.put(file)
+            Promise.resolve(task).then(() => {
+                alert("Success!")
+                refreshGallery()
+            })
+        }).catch(err => {
+            console.log(err)
+            alert("An error occured. Check console for more details. " + err.message_)
+        })
+    } else {
+        alert("Please fill in all fields")
+    }
 })
+
+function checkGalleryForm() {
+    for (i of document.getElementById("new_gallery_entry").querySelector(".form-group").getElementsByTagName("input")) {
+        if (!i.value) return false
+    }
+    return true
+}
 
 function expandGallery(key) {
     let element = document.getElementById("gallery" + key)
@@ -92,6 +137,60 @@ function listGallery(counter = 0) {
                         <p>Pattern: ${(data.details.pattern ? "yes" : "no")}</p>
                     </div>`
                 )
+            }).then(() => {
+                document.getElementById(`removeGallery${id}`).addEventListener("click", () => {
+                    if (confirm("Are you sure you want to remove this gallery entry?")) {
+                        db.collection("gallery").get().then(snapshot => {
+                            let data //data of object to be deleted
+                            for (doc of snapshot.docs) {
+                                if (doc.id == id) {
+                                    data = doc.data()
+                                    break
+                                }
+                            }
+                            const largest = max(Object.keys(snapshot.docs)).toString() //largest key
+                            let largestData
+
+                            for (doc of snapshot.docs) { //data of object with largest id
+                                if (doc.id == largest) {
+                                    largestData = doc.data()
+                                    break
+                                }
+                            }
+
+                            const file = data.file
+                            
+                            let dataForAdd = new Map()
+                            
+                            for (i of Object.keys(largestData)) {
+                                dataForAdd[i] = largestData[i]
+                            }
+                            
+                            storageRef.child(file).delete().then(() => {
+                                db.collection("gallery").doc(id.toString()).set({
+                                    ...dataForAdd
+                                }).then(() => {
+                                    db.collection("gallery").doc(largest.toString()).delete().then(() => {
+                                        alert("Success!")
+                                        refreshGallery()
+                                    }).catch(err => {
+                                        console.log(err)
+                                        alert("An error occured. Check console for more details. " + err.message_)
+                                    })
+                                }).catch(err => {
+                                    console.log(err)
+                                    alert("An error occured. Check console for more details. " + err.message_)
+                                })
+                            }).catch(err => {
+                                console.log(err)
+                                alert("An error occured. Check console for more details. " + err.message_)
+                            })
+                        }).catch(err => {
+                            console.log(err)
+                            alert("An error occured. Check console for more details. " + err.message_)
+                        })
+                    }
+                })
             })
         } else {
             cur = null
