@@ -55,7 +55,7 @@ document.getElementById("new_countertop").addEventListener("submit", e => {
 //makes information drop down
 function expandCountertop(key) {
     let element = document.getElementById("countertop" + key)
-    let container = element.querySelector(".details")[0]
+    let container = element.querySelector(".details")
     if (container.style.maxHeight){
         container.style.maxHeight = null;
     } else {
