@@ -1,2 +1,38 @@
-@import "bootstrap.scss"
+// Coolors Exported Palette - coolors.co/ffffff-f4f4f4-373737-dcd0c0-5c6d70
+$paper: rgba(244, 244, 244, 1);
+$jet: rgba(55, 55, 55, 1);
+$pale-gold: rgba(220, 208, 192, 1);
+$cadet: rgba(92, 109, 112, 1);
 
+$body-bg: $paper;
+$body-color: $jet;
+
+$theme-colors: (
+    "primary": $jet,
+    "secondary": $pale-gold,
+    "accent1": $cadet,
+    "paper": $paper,
+    "none": rgba(0, 0, 0, 0),
+    "white": #fff
+);
+
+@import "bootstrap.scss";
+
+@each $color, $value in $theme-colors {
+    .jumbotron-#{$color} {
+      background-color: $value;
+    }
+}
+
+.jumbotron-primary {
+    color: $paper;
+}
+
+.jumbotron-white {
+    color: $jet;
+}
+
+.jumbotron-special {
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 0;
+}
