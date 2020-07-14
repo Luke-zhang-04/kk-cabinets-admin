@@ -163,7 +163,7 @@ exports.contactFormSubmit = functions.https.onCall((data, _) => {
         from: `${APP_NAME} <noreply@firebase.com>`,
         to: data.email,
         subject: "Email Sent to KK Cabinets",
-        text: `Dear ${data.email}, \nYour email was sucessfully sent to KK Cabinets. A representative will get in touch with you as soon as possible!\n\nThanks,\nYou're KK Cabinets Team`,
+        text: `Dear ${data.name},\n\nYour email was sucessfully sent to KK Cabinets. A representative will get in touch with you as soon as possible!\n\nYour email was sent with the following information:\nName: ${data.name}\nEmail:*${data.email}\n\n${data.desc}\n\nThanks,\nYour KK Cabinets Team`,
     },
         transport1 = sendEmail(mailTransport, mailOptions1),
         mailOptions2 = {
@@ -175,7 +175,7 @@ exports.contactFormSubmit = functions.https.onCall((data, _) => {
         transport2 = sendEmail(mailTransport, mailOptions2)
 
     return Promise.all([transport1, transport2])
-        .then(() => ({msg: "Email sucessfully sent", ctx: _}))
+        .then(() => ({msg: "Email sucessfully sent"}))
         .catch((err) => ({msg: err.messsage, err: true}))
 })
 
