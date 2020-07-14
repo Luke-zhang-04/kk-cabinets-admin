@@ -83,7 +83,7 @@ exports.addEditorRole = functions.https.onCall((data, context) => {
             from: `${APP_NAME} <noreply@firebase.com>`,
             to: data.email,
             subject: `Welcome to ${APP_NAME}`,
-            text: `Dear ${data.email}, \nYou've been added to the editor list for the KK Cabinets Administrator page! \nGo to https://kk-cabinets.web.app to read and write to the database.\nSincerly, your KK Cabinets team`
+            text: `Dear ${data.email},\n\nYou've been added to the editor list for the KK Cabinets Administrator page! \nGo to https://kk-cabinets.web.app to read and write to the database.\nSincerly, your KK Cabinets team`
         };
         sendEmail(mailTransport, mailOptions)
         return {
@@ -114,8 +114,6 @@ exports.removeRole = functions.https.onCall((data, context) => {
     })
 })
 
-exports.getContext = functions.https.onCall((_, context) => context)
-
 exports.contactFormSubmit = functions.https.onCall((data, _) => {
     const mailOptions1 = {
         from: `${APP_NAME} <noreply@firebase.com>`,
@@ -128,7 +126,7 @@ exports.contactFormSubmit = functions.https.onCall((data, _) => {
             from: data.email,
             to: "842victoria@gmail.com",
             subject: `${data.name} sent an email via the contact form`,
-            text: `Name: ${data.name}\n\nEmail: ${data.name}\n\n${data.desc}`,
+            text: `Name: ${data.name}\n\nEmail: ${data.email}\n\n${data.desc}`,
         }
         transport2 = sendEmail(mailTransport, mailOptions2)
 
