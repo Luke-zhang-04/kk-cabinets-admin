@@ -38,6 +38,14 @@ const mailTransport = nodemailer.createTransport({
         pass: functions.config().gmail.password,
     },
 })
+
+/**
+ * Verify answer from user
+ * @param {string} problem - problem given
+ * @param {string} answer - answer given
+ * @returns {boolean} - whether or not answer is correct
+ */
+const verifyMathProblem = (problem, answer) => eval(problem) === Number(answer);
   
 
 exports.addAdminRole = functions.https.onCall((data, context) => {
@@ -114,7 +122,43 @@ exports.removeRole = functions.https.onCall((data, context) => {
     })
 })
 
+/**
+ * Verify an email adress so it's legit
+ * @param {string} email - email to check
+ * @returns {boolean} if email is valid
+ */
+const verifyEmail = (email) => {
+    let emailIsValid = [false, false]
+
+    for (const letter of email) {
+        if (letter === ".") {
+            emailIsValid[1] = true
+        } else if (letter === "@") {
+            emailIsValid[0] = true
+        }
+    }
+
+    return emailIsValid[0] && emailIsValid[1]
+}
+
 exports.contactFormSubmit = functions.https.onCall((data, _) => {
+    if (!data.email || !data.name || !data.desc || !data.problem || !data.answer) {
+        return {
+            msg: "Please fill out all fields",
+            err: true,
+        }
+    } else if (!verifyMathProblem(data.problem, data.answer)) {
+        return {
+            msg: "Incorrect answer to math problem",
+            err: true,
+        }
+    } else if (!verifyEmail(data.email)) {
+        return {
+            msg: "Email is not valid",
+            err: true,
+        }
+    }
+
     const mailOptions1 = {
         from: `${APP_NAME} <noreply@firebase.com>`,
         to: data.email,
@@ -131,8 +175,8 @@ exports.contactFormSubmit = functions.https.onCall((data, _) => {
         transport2 = sendEmail(mailTransport, mailOptions2)
 
     return Promise.all([transport1, transport2])
-        .then(() => "Email sucessfully sent")
-        .catch((err) => err.messsage)
+        .then(() => ({msg: "Email sucessfully sent", ctx: _}))
+        .catch((err) => ({msg: err.messsage, err: true}))
 })
 
 async function sendEmail(transporter, config) {
