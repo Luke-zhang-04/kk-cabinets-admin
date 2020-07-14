@@ -8,7 +8,6 @@
 lerna-debug.log
 *~
 service-account-credentials.json
-**/package-lock.json
 
 .idea
 .npm

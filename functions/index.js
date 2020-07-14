@@ -28,15 +28,16 @@ const APP_NAME = "KK-Cabinets Admin"
 admin.initializeApp({
     databaseURL: "https://kk-cabinets.firebaseio.com/"
 })
-let database = admin.database()
+
+const database = admin.database()
 
 const mailTransport = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: functions.config().gmail.email,
-      pass: functions.config().gmail.password,
+        user: functions.config().gmail.email,
+        pass: functions.config().gmail.password,
     },
-});
+})
   
 
 exports.addAdminRole = functions.https.onCall((data, context) => {
@@ -113,7 +114,30 @@ exports.removeRole = functions.https.onCall((data, context) => {
     })
 })
 
+exports.getContext = functions.https.onCall((_, context) => context)
+
+exports.contactFormSubmit = functions.https.onCall((data, _) => {
+    const mailOptions1 = {
+        from: `${APP_NAME} <noreply@firebase.com>`,
+        to: data.email,
+        subject: "Email Sent to KK Cabinets",
+        text: `Dear ${data.email}, \nYour email was sucessfully sent to KK Cabinets. A representative will get in touch with you as soon as possible!\n\nThanks,\nYou're KK Cabinets Team`,
+    },
+        transport1 = sendEmail(mailTransport, mailOptions1),
+        mailOptions2 = {
+            from: data.email,
+            to: "842victoria@gmail.com",
+            subject: `${data.name} sent an email via the contact form`,
+            text: `Name: ${data.name}\n\nEmail: ${data.name}\n\n${data.desc}`,
+        }
+        transport2 = sendEmail(mailTransport, mailOptions2)
+
+    return Promise.all([transport1, transport2])
+        .then(() => "Email sucessfully sent")
+        .catch((err) => err.messsage)
+})
+
 async function sendEmail(transporter, config) {
-    await transporter.sendMail(config)
-    return null
+    const transport = await transporter.sendMail(config)
+    return transport
 }
